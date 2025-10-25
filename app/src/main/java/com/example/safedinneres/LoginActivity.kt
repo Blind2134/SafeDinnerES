@@ -189,7 +189,8 @@ class LoginActivity : AppCompatActivity() {
             if (resultado.isSuccess) {
                 Toast.makeText(
                     this@LoginActivity,
-                    "Correo de recuperación enviado ✅\n\nRevisa tu bandeja de entrada (y spam)",
+                    "Si existe una cuenta con este correo, recibirás un enlace de recuperación.\n\n" +
+                            "Revisa tu bandeja de entrada y spam.",
                     Toast.LENGTH_LONG
                 ).show()
             } else {
