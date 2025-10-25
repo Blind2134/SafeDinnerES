@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <color name="purple_primary">#7B42FA</color>
+    <color name="purple_dark">#5A2EC7</color>
+    <color name="purple_light">#D0B8FF</color>
+
+    <color name="sky_blue_soft">#B3E5FC</color>
+    <color name="sky_blue_main">#81D4FA</color>
+    <color name="sky_blue_dark">#4FC3F7</color>
+
+
+    <color name="teal_accent">#00C896</color>
+    <color name="orange_accent">#FFA94D</color>
+    <color name="blue_accent">#4ECDC4</color>
+
+
+    <color name="background_light">#F9F9FC</color>
+    <color name="surface_light">#FFFFFF</color>
+    <color name="divider">#E0E0E0</color>
+
+
+    <color name="text_primary">#1E1E2C</color>
+    <color name="text_secondary">#6D6D80</color>
+    <color name="text_hint">#9E9E9E</color>
+
+
+    <color name="success">#00C896</color>
+    <color name="warning">#FFA94D</color>
+    <color name="error">#FF6B6B</color>
+
+
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="background_dark">#121212</color>
+    <color name="surface_dark">#1E1E2C</color>
+
+    <color name="blue_primary">#1976D2</color>
+    <color name="blue_dark">#0D47A1</color>
+    <color name="blue_light">#64B5F6</color>
+
+
+    <color name="card_background_blue">#BBDEFB</color>
+
+
+</resources>

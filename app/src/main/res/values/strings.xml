@@ -1,0 +1,58 @@
+<resources>
+    <string name="app_name">SafeDinnerES</string>
+
+
+    <string name="app_logo">Logo de la aplicación</string>
+    <string name="control_gastos">Controla tus Gastos</string>
+    <string name="inicia_sesion">Inicia sesión para continuar</string>
+    <string name="email">Email</string>
+    <string name="password">Contraseña</string>
+
+    <string name="login">Iniciar Sesión</string>
+    <string name="no_account">¿No tienes cuenta?</string>
+    <string name="register">Regístrate</string>
+
+
+    <string name="crear_cuenta">Crear Cuenta</string>
+    <string name="registrate_para_comenzar">Regístrate para comenzar</string>
+    <string name="nombre">Nombre</string>
+    <string name="confirmar_password">Confirmar Contraseña</string>
+    <string name="registrarse">Registrarse</string>
+    <string name="ya_tienes_cuenta">¿Ya tienes cuenta?</string>
+    <string name="inicia_sesion_link">Inicia Sesión</string>
+
+
+    <string name="editar">Editar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="title_activity_home">HomeActivity</string>
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password</string>
+    <string name="action_sign_in">Sign in or register</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="welcome">"Welcome !"</string>
+    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_password">Password must be >5 characters</string>
+    <string name="login_failed">"Login failed"</string>
+
+    <string name="hola">Hola,</string>
+    <string name="cerrar_sesion">Salir</string>
+    <string name="total_gastado_mes">Total gastado este mes</string>
+    <string name="sin_gastos">0 gastos registrados</string>
+    <string name="mis_gastos">Mis Gastos</string>
+    <string name="no_hay_gastos">No hay gastos registrados</string>
+    <string name="presiona_mas_agregar">Presiona + para agregar tu primer gasto</string>
+    <string name="agregar_gasto">Agregar gasto</string>
+
+    <string name="edit_budget_title">Editar presupuesto</string>
+
+    <string name="month_label">Mes</string>
+    <string name="amount_label">Monto (S/.)</string>
+
+    <string name="amount_hint">Ingrese monto</string>
+
+    <string name="save_button">Guardar</string>
+    <string name="cancel_button">Cancelar</string>
+    <string name="delete_button">Eliminar</string>
+
+    <string name="month_selection_description">Seleccionar o cambiar el mes del presupuesto</string>
+</resources>
