@@ -1,8 +1,10 @@
 package com.example.safedinneres
 
 import android.app.AlertDialog
+import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -31,6 +33,11 @@ class LoginActivity : AppCompatActivity() {
             startActivity(Intent(this, RegisterActivity::class.java))
             finish()
         }
+
+        // ⭐ NUEVO: Click en "¿Olvidaste tu contraseña?"
+        binding.tvOlvidastePassword.setOnClickListener {
+            mostrarDialogRecuperarPassword()
+        }
     }
 
     private fun iniciarSesion() {
@@ -42,13 +49,11 @@ class LoginActivity : AppCompatActivity() {
             return
         }
 
-        // ⭐ DESHABILITAR BOTÓN MIENTRAS PROCESA
         binding.btnLogin.isEnabled = false
 
         lifecycleScope.launch {
             val resultado = usuarioRepo.iniciarSesion(email, password)
 
-            // ⭐ HABILITAR BOTÓN NUEVAMENTE
             binding.btnLogin.isEnabled = true
 
             if (resultado.isSuccess) {
@@ -69,7 +74,6 @@ class LoginActivity : AppCompatActivity() {
             } else {
                 val mensajeError = resultado.exceptionOrNull()?.message ?: "No se pudo iniciar sesión"
 
-                // ⭐ NUEVO: Si el error es por email no verificado, ofrecer reenviar
                 if (mensajeError.contains("verifica tu correo", ignoreCase = true)) {
                     mostrarDialogReenviarVerificacion(email, password)
                 } else {
@@ -83,7 +87,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ⭐ NUEVA FUNCIÓN: Dialog para reenviar email de verificación
     private fun mostrarDialogReenviarVerificacion(email: String, password: String) {
         AlertDialog.Builder(this)
             .setTitle("Email no verificado")
@@ -99,18 +102,14 @@ class LoginActivity : AppCompatActivity() {
             .show()
     }
 
-    // ⭐ NUEVA FUNCIÓN: Reenviar email de verificación
     private fun reenviarEmailVerificacion(email: String, password: String) {
         lifecycleScope.launch {
             try {
-                // Primero hacer login temporal para poder enviar el email
                 FirebaseAuth.getInstance()
                     .signInWithEmailAndPassword(email, password)
                     .addOnSuccessListener {
-                        // Enviar email de verificación
                         it.user?.sendEmailVerification()
                             ?.addOnSuccessListener {
-                                // Cerrar sesión inmediatamente
                                 FirebaseAuth.getInstance().signOut()
 
                                 Toast.makeText(
@@ -140,6 +139,71 @@ class LoginActivity : AppCompatActivity() {
                     "Error al reenviar: ${e.message}",
                     Toast.LENGTH_LONG
                 ).show()
+            }
+        }
+    }
+
+    // ⭐ NUEVA FUNCIÓN: Mostrar dialog de recuperar contraseña
+    private fun mostrarDialogRecuperarPassword() {
+        val builder = AlertDialog.Builder(this)
+        val dialogView = layoutInflater.inflate(R.layout.dialog_recuperar_password, null)
+        val etEmail = dialogView.findViewById<EditText>(R.id.etEmailRecuperar)
+
+        builder.setView(dialogView)
+            .setTitle("Recuperar Contraseña")
+            .setMessage("Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña")
+            .setPositiveButton("Enviar") { dialog, _ ->
+                val email = etEmail.text.toString().trim()
+
+                if (email.isEmpty()) {
+                    Toast.makeText(this, "Ingresa un correo electrónico", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                    Toast.makeText(this, "Ingresa un correo válido", Toast.LENGTH_SHORT).show()
+                    return@setPositiveButton
+                }
+
+                enviarEmailRecuperacion(email)
+                dialog.dismiss()
+            }
+            .setNegativeButton("Cancelar") { dialog, _ ->
+                dialog.dismiss()
+            }
+            .create()
+            .show()
+    }
+
+    // ⭐ NUEVA FUNCIÓN: Enviar email de recuperación
+    private fun enviarEmailRecuperacion(email: String) {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Enviando correo...")
+        progressDialog.show()
+
+        lifecycleScope.launch {
+            val resultado = usuarioRepo.enviarEmailRecuperacion(email)
+
+            progressDialog.dismiss()
+
+            if (resultado.isSuccess) {
+                Toast.makeText(
+                    this@LoginActivity,
+                    "Correo de recuperación enviado ✅\n\nRevisa tu bandeja de entrada (y spam)",
+                    Toast.LENGTH_LONG
+                ).show()
+            } else {
+                val error = resultado.exceptionOrNull()?.message ?: "Error desconocido"
+
+                val mensaje = when {
+                    error.contains("no user record", ignoreCase = true) ->
+                        "No existe una cuenta con este correo"
+                    error.contains("invalid email", ignoreCase = true) ->
+                        "Correo electrónico inválido"
+                    else -> "Error: $error"
+                }
+
+                Toast.makeText(this@LoginActivity, mensaje, Toast.LENGTH_LONG).show()
             }
         }
     }
