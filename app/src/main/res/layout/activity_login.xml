@@ -99,7 +99,7 @@
             android:id="@+id/tvOlvidastePassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="¿Olvidaste tu contraseña?"
+            android:text="@string/olvidaste_password"
             android:textColor="@android:color/holo_blue_dark"
             android:textSize="14sp"
             android:textStyle="bold"

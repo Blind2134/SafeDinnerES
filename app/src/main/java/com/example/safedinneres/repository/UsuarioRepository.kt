@@ -17,6 +17,8 @@ class UsuarioRepository {
             val result = auth.createUserWithEmailAndPassword(email, password).await()
             val uid = result.user?.uid ?: return Result.failure(Exception("Error al obtener UID"))
 
+            result.user?.sendEmailVerification()?.await()
+
 
             val usuario = Usuario(
                 id = uid,
@@ -27,6 +29,8 @@ class UsuarioRepository {
 
             db.collection("usuarios").document(uid).set(usuario).await()
 
+            auth.signOut()
+
             Result.success(usuario)
         } catch (e: Exception) {
             Result.failure(e)
@@ -35,16 +39,37 @@ class UsuarioRepository {
 
     suspend fun iniciarSesion(email: String, password: String): Result<Usuario> {
         return try {
-
+            // Iniciar sesión
             val result = auth.signInWithEmailAndPassword(email, password).await()
             val uid = result.user?.uid ?: return Result.failure(Exception("Error al obtener UID"))
 
+            // ⭐ NUEVO: Verificar si el email está confirmado
+            val user = result.user
+            if (user?.isEmailVerified == false) {
+                auth.signOut()
+                return Result.failure(Exception("Por favor verifica tu correo electrónico antes de iniciar sesión"))
+            }
 
+            // Obtener datos del usuario de Firestore
             val snapshot = db.collection("usuarios").document(uid).get().await()
             val usuario = snapshot.toObject(Usuario::class.java)
                 ?: return Result.failure(Exception("Usuario no encontrado"))
 
             Result.success(usuario)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun reenviarEmailVerificacion(): Result<Unit> {
+        return try {
+            val user = auth.currentUser
+            if (user != null) {
+                user.sendEmailVerification().await()
+                Result.success(Unit)
+            } else {
+                Result.failure(Exception("No hay usuario autenticado"))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

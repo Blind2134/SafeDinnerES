@@ -54,5 +54,14 @@
     <string name="cancel_button">Cancelar</string>
     <string name="delete_button">Eliminar</string>
 
+    <string name="olvidaste_password">¿Olvidaste tu contraseña?</string>
+
+    <string name="email_no_verificado">Email no verificado</string>
+    <string name="email_no_verificado_mensaje">Tu correo electrónico aún no ha sido verificado.\n\n¿Deseas que te reenviemos el correo de verificación?</string>
+    <string name="reenviar">Reenviar</string>
+    <string name="email_verificacion_reenviado">Correo de verificación reenviado. Por favor revisa tu bandeja de entrada</string>
+    <string name="verifica_tu_correo">Por favor verifica tu correo electrónico antes de iniciar sesión</string>
+
+
     <string name="month_selection_description">Seleccionar o cambiar el mes del presupuesto</string>
 </resources>

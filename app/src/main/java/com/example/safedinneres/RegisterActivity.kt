@@ -5,18 +5,15 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-
 import androidx.lifecycle.lifecycleScope
 import com.example.safedinneres.databinding.ActivityRegisterBinding
 import com.example.safedinneres.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
-
 class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private val usuarioRepo = UsuarioRepository()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -59,23 +56,25 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
+        // ⭐ DESHABILITAR BOTÓN MIENTRAS PROCESA
+        binding.btnRegister.isEnabled = false
+
         lifecycleScope.launch {
             val resultado = usuarioRepo.registrarUsuario(nombre, email, password)
+
+            // ⭐ HABILITAR BOTÓN NUEVAMENTE
+            binding.btnRegister.isEnabled = true
+
             if (resultado.isSuccess) {
+                // ⭐ NUEVO MENSAJE: Ya no guardamos sesión ni vamos a MainActivity
+                Toast.makeText(
+                    this@RegisterActivity,
+                    "Cuenta creada ✅\n\nPor favor verifica tu correo electrónico antes de iniciar sesión",
+                    Toast.LENGTH_LONG
+                ).show()
 
-                val usuario = resultado.getOrNull()
-                usuario?.let {
-
-                    val prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE)
-                    prefs.edit()
-                        .putString("nombre_usuario", it.nombre)
-                        .putString("uid_usuario", it.id)
-                        .apply()
-                }
-
-                Toast.makeText(this@RegisterActivity, "Registro exitoso 🎉", Toast.LENGTH_SHORT).show()
-
-                val intent = Intent(this@RegisterActivity, MainActivity::class.java)
+                // ⭐ Ir al LoginActivity en lugar de MainActivity
+                val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)
 
@@ -89,5 +88,5 @@ class RegisterActivity : AppCompatActivity() {
                 ).show()
             }
         }
-        }
     }
+}
