@@ -1,37 +1,35 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-
     <style name="Theme.SafeDinnerES" parent="Theme.Material3.DayNight.NoActionBar">
 
-
+        <!-- 🎨 Colores principales -->
         <item name="colorPrimary">@color/blue_primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <item name="colorPrimaryContainer">@color/blue_light</item>
-        <item name="colorOnPrimaryContainer">@color/white</item>
+        <item name="colorOnPrimaryContainer">@color/blue_dark</item>
 
-
+        <!-- 🌈 Secundarios -->
         <item name="colorSecondary">@color/teal_accent</item>
         <item name="colorOnSecondary">@color/white</item>
         <item name="colorSecondaryContainer">@color/blue_accent</item>
-        <item name="colorOnSecondaryContainer">@color/white</item>
+        <item name="colorOnSecondaryContainer">@color/blue_dark</item>
 
-
-        <item name="android:windowBackground">@color/white</item>
-        <item name="colorSurface">@color/white</item>
+        <!-- 🧾 Fondo y superficies -->
+        <item name="android:windowBackground">@color/background_light</item>
+        <item name="colorSurface">@color/surface_light</item>
         <item name="colorOnSurface">@color/text_primary</item>
         <item name="colorOnBackground">@color/text_primary</item>
 
-
+        <!-- 🧠 Texto -->
         <item name="textAppearanceBodyMedium">@style/TextAppearance.SafeDinnerES.Body</item>
 
-
+        <!-- 🧭 Barras -->
         <item name="android:statusBarColor">@color/blue_dark</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:navigationBarColor">@color/white</item>
-
+        <item name="android:windowLightStatusBar">true</item> <!-- Texto oscuro si el fondo es claro -->
+        <item name="android:navigationBarColor">@color/surface_light</item>
     </style>
 
-
+    <!-- 📝 Estilo de texto -->
     <style name="TextAppearance.SafeDinnerES.Body" parent="TextAppearance.Material3.BodyMedium">
         <item name="android:textColor">@color/text_primary</item>
     </style>
