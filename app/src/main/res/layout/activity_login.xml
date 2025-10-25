@@ -95,7 +95,19 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-
+        <TextView
+            android:id="@+id/tvOlvidastePassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="¿Olvidaste tu contraseña?"
+            android:textColor="@android:color/holo_blue_dark"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:padding="8dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:layout_gravity="end"
+            android:layout_marginTop="8dp"/>
 
 
         <com.google.android.material.button.MaterialButton
