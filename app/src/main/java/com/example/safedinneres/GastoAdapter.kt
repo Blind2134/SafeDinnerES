@@ -6,12 +6,13 @@ import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safedinneres.databinding.ItemGastoBinding
 import com.example.safedinneres.models.Gasto
+import com.example.safedinneres.models.GastoConDetalles
 import java.text.SimpleDateFormat
 import java.util.*
 
 class GastoAdapter(
-    private var listaGastos: List<Gasto>,
-    private val onItemClick: (Gasto) -> Unit // 👈 función lambda para el clic
+    private var listaGastos: List<GastoConDetalles>,
+    private val onItemClick: (GastoConDetalles) -> Unit
 ) : RecyclerView.Adapter<GastoAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemGastoBinding) :
@@ -23,15 +24,15 @@ class GastoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val gasto = listaGastos[position]
+        val item = listaGastos[position]
+        val gasto = item.gasto
 
         with(holder.binding) {
             tvDescripcion.text = gasto.descripcion
-            tvCategoria.text = gasto.categoria
+            tvCategoria.text = item.nombreCategoria.ifBlank { "Sin categoría" }
             tvMonto.text = "S/ %.2f".format(gasto.monto)
 
-
-            val emojiPago = when (gasto.metodoPago) {
+            val emojiPago = when (item.nombreMetodoPago) {
                 "Efectivo" -> "💵"
                 "Tarjeta" -> "💳"
                 "Yape" -> "📱"
@@ -39,10 +40,9 @@ class GastoAdapter(
                 "Transferencia" -> "🏦"
                 else -> "💰"
             }
-            tvMetodoPago.text = "$emojiPago ${gasto.metodoPago}"
+            tvMetodoPago.text = "$emojiPago ${item.nombreMetodoPago}"
 
-
-            val (emojiCat, colorCat) = when (gasto.categoria) {
+            val (emojiCat, colorCat) = when (item.nombreCategoria) {
                 "Comida" -> "🍔" to "#FF9800"
                 "Transporte" -> "🚌" to "#03A9F4"
                 "Educación" -> "📚" to "#8BC34A"
@@ -54,21 +54,19 @@ class GastoAdapter(
             tvIconoCategoria.text = emojiCat
             viewColorCategoria.setBackgroundColor(colorCat.toColorInt())
 
-            // 📅 Formato de fecha legible
+            // 📅 Fecha formateada
             val formato = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             tvFecha.text = formato.format(Date(gasto.fecha))
 
-            // 👇 Clic en el item
-            root.setOnClickListener {
-                onItemClick(gasto)
-            }
+            root.setOnClickListener { onItemClick(item) }
         }
     }
 
     override fun getItemCount() = listaGastos.size
 
-    fun actualizarLista(nuevaLista: List<Gasto>) {
+    fun actualizarLista(nuevaLista: List<GastoConDetalles>) {
         listaGastos = nuevaLista
         notifyDataSetChanged()
     }
 }
+

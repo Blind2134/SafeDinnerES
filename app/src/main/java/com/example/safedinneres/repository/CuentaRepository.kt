@@ -55,7 +55,8 @@ class CuentaRepository {
     // 🔹 Actualizar saldo (por ejemplo, cuando haces un gasto)
     suspend fun actualizarSaldoCuenta(id: String, nuevoSaldo: Double): Result<Void?> {
         return try {
-            collection.document(id).update("saldo", nuevoSaldo).await()
+            val saldoSeguro = if (nuevoSaldo < 0) 0.0 else nuevoSaldo
+            collection.document(id).update("saldo", saldoSeguro).await()
             Result.success(null)
         } catch (e: Exception) {
             Result.failure(e)
@@ -67,6 +68,24 @@ class CuentaRepository {
         return try {
             collection.document(id).update("deudaActual", nuevaDeuda).await()
             Result.success(null)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun pagarDeudaCuenta(id: String, montoPago: Double): Result<Void?> {
+        return try {
+            val cuentaResult = obtenerCuentaPorId(id)
+            if (cuentaResult.isSuccess) {
+                val cuenta = cuentaResult.getOrNull()
+                cuenta?.let {
+                    val nuevaDeuda = (it.deudaActual - montoPago).coerceAtLeast(0.0)
+                    collection.document(id).update("deudaActual", nuevaDeuda).await()
+                    Result.success(null)
+                } ?: Result.failure(Exception("Cuenta no encontrada"))
+            } else {
+                Result.failure(Exception("Error al obtener cuenta"))
+            }
         } catch (e: Exception) {
             Result.failure(e)
         }

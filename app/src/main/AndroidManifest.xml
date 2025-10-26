@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SafeDinnerES">
         <activity
+            android:name=".CuentasActivity"
+            android:exported="false" />
+        <activity
             android:name=".PerfilActivity"
             android:exported="false" />
         <activity

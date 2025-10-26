@@ -12,6 +12,7 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Título -->
         <TextView
             android:id="@+id/tvTitle"
             android:layout_width="match_parent"
@@ -21,7 +22,7 @@
             android:layout_marginBottom="24dp"
             android:gravity="center_horizontal" />
 
-
+        <!-- Descripción -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -36,10 +37,9 @@
             android:hint="Ej: Almuerzo en restaurante"
             android:inputType="text"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:autofillHints="text" />
+            android:layout_marginBottom="16dp" />
 
-
+        <!-- Monto -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -54,10 +54,9 @@
             android:hint="0.00"
             android:inputType="numberDecimal"
             android:padding="16dp"
-            android:layout_marginBottom="16dp"
-            android:autofillHints="money" />
+            android:layout_marginBottom="16dp" />
 
-
+        <!-- Fecha -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,7 +79,7 @@
             android:focusable="true"
             android:layout_marginBottom="16dp" />
 
-
+        <!-- Categoría -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -95,7 +94,7 @@
             android:padding="12dp"
             android:layout_marginBottom="16dp" />
 
-
+        <!-- Método de Pago -->
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -108,9 +107,24 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:padding="12dp"
+            android:layout_marginBottom="16dp" />
+
+        <!-- Nueva sección: Cuenta -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Cuenta"
+            android:textAppearance="?attr/textAppearanceLabelLarge"
+            android:layout_marginBottom="4dp" />
+
+        <Spinner
+            android:id="@+id/spinnerCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="12dp"
             android:layout_marginBottom="32dp" />
 
-
+        <!-- Botones -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -128,7 +142,6 @@
                 tools:visibility="visible" />
 
             <Space
-                android:id="@+id/spaceEliminar"
                 android:layout_width="16dp"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
@@ -156,6 +169,4 @@
         </LinearLayout>
 
     </LinearLayout>
-
-
 </ScrollView>

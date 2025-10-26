@@ -63,8 +63,6 @@
     <string name="verifica_tu_correo">Por favor verifica tu correo electrónico antes de iniciar sesión</string>
 
 
-
-
     <string name="recuperar_password_titulo">Recuperar Contraseña</string>
     <string name="recuperar_password_mensaje">Ingresa tu correo electrónico y te enviaremos un enlace para restablecer tu contraseña</string>
     <string name="correo_electronico">Correo electrónico</string>

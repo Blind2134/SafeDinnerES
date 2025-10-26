@@ -24,12 +24,14 @@ class ReporteMensualActivity : BaseActivityWithNav() {
     private lateinit var binding: ActivityReporteMensualBinding
     private val gastoRepository = GastoRepository()
     private val presupuestoRepo = PresupuestoRepository()
+
     private var calendarioMes: Calendar = Calendar.getInstance()
     private var gastosDelMes: List<Gasto> = emptyList()
     private var gastosDelMesAnterior: List<Gasto> = emptyList()
 
     private val userId by lazy {
-        getSharedPreferences("USER_PREFS", MODE_PRIVATE).getString("uid_usuario", "") ?: ""
+        getSharedPreferences("USER_PREFS", MODE_PRIVATE)
+            .getString("uid_usuario", "") ?: ""
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,15 +39,11 @@ class ReporteMensualActivity : BaseActivityWithNav() {
         binding = ActivityReporteMensualBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         supportActionBar?.hide()
-
-
         setupBottomNavigation(R.id.bottomNavigationView)
 
-        val prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE)
         val formato = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
-
+        val prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE)
 
         val mesGuardado = prefs.getString("mes_seleccionado", null)
         if (mesGuardado != null) {
@@ -55,10 +53,6 @@ class ReporteMensualActivity : BaseActivityWithNav() {
                 calendarioMes = Calendar.getInstance()
             }
         }
-
-
-
-
 
         binding.btnMesAnterior.setOnClickListener {
             calendarioMes.add(Calendar.MONTH, -1)
@@ -70,49 +64,60 @@ class ReporteMensualActivity : BaseActivityWithNav() {
             actualizarReporte()
         }
 
-
         actualizarReporte()
     }
 
     private fun actualizarReporte() {
-        val formato = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
-        val mesTexto = formato.format(calendarioMes.time).replaceFirstChar { it.uppercase() }
+        val formatoMes = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
+        val mesTexto = formatoMes.format(calendarioMes.time).replaceFirstChar { it.uppercase() }
         binding.tvMesActual.text = mesTexto
-
 
         val prefs = getSharedPreferences("USER_PREFS", MODE_PRIVATE)
         prefs.edit().putString("mes_seleccionado", mesTexto).apply()
 
         lifecycleScope.launch {
             try {
-                // Cargar gastos del mes actual
-                val resGastos = gastoRepository.listarGastos(mesTexto)
+                val resGastos = gastoRepository.obtenerGastosPorUsuario(userId)
                 if (resGastos.isSuccess) {
-                    gastosDelMes = resGastos.getOrNull() ?: emptyList()
+                    val todosGastos = resGastos.getOrNull() ?: emptyList()
+
+                    // Filtrar por mes actual y mes anterior
+                    gastosDelMes = filtrarGastosPorMes(todosGastos, calendarioMes)
+
+                    val calAnterior = calendarioMes.clone() as Calendar
+                    calAnterior.add(Calendar.MONTH, -1)
+                    gastosDelMesAnterior = filtrarGastosPorMes(todosGastos, calAnterior)
                 }
 
-
-                val calendarioAnterior = calendarioMes.clone() as Calendar
-                calendarioAnterior.add(Calendar.MONTH, -1)
-                val mesAnteriorTexto = formato.format(calendarioAnterior.time).replaceFirstChar { it.uppercase() }
-                val resGastosAnterior = gastoRepository.listarGastos(mesAnteriorTexto)
-                if (resGastosAnterior.isSuccess) {
-                    gastosDelMesAnterior = resGastosAnterior.getOrNull() ?: emptyList()
-                }
-
-
+                // Obtener presupuesto del mes
                 val resPresupuesto = presupuestoRepo.obtenerPresupuesto(userId, mesTexto)
                 val presupuesto = if (resPresupuesto.isSuccess) resPresupuesto.getOrNull() else null
 
-
+                // Actualizar UI
                 actualizarResumen(presupuesto)
                 actualizarComparacion()
                 actualizarGraficoPastel()
                 actualizarTop3()
 
             } catch (e: Exception) {
-                Toast.makeText(this@ReporteMensualActivity, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    this@ReporteMensualActivity,
+                    "Error al cargar reporte: ${e.message}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
+        }
+    }
+
+    private fun filtrarGastosPorMes(gastos: List<Gasto>, calendario: Calendar): List<Gasto> {
+        val mes = calendario.get(Calendar.MONTH)
+        val anio = calendario.get(Calendar.YEAR)
+
+        val calTemp = Calendar.getInstance()
+
+        return gastos.filter {
+            calTemp.timeInMillis = it.fecha
+            calTemp.get(Calendar.MONTH) == mes && calTemp.get(Calendar.YEAR) == anio
         }
     }
 
@@ -125,14 +130,11 @@ class ReporteMensualActivity : BaseActivityWithNav() {
             binding.progressPresupuesto.progress = porcentaje.coerceAtMost(100)
             binding.tvPresupuestoInfo.text = "$porcentaje% del presupuesto usado"
 
-
-            if (totalGastado > presupuesto.montoTotal) {
-                binding.progressPresupuesto.progressTintList =
+            binding.progressPresupuesto.progressTintList =
+                if (totalGastado > presupuesto.montoTotal)
                     getColorStateList(android.R.color.holo_red_dark)
-            } else {
-                binding.progressPresupuesto.progressTintList =
+                else
                     getColorStateList(android.R.color.holo_blue_dark)
-            }
         } else {
             binding.progressPresupuesto.progress = 0
             binding.tvPresupuestoInfo.text = "Sin presupuesto configurado"
@@ -148,10 +150,15 @@ class ReporteMensualActivity : BaseActivityWithNav() {
         } else {
             val diferencia = totalActual - totalAnterior
             val porcentaje = ((diferencia / totalAnterior) * 100)
-
             when {
-                diferencia > 0 -> String.format("Gastaste S/. %.2f más que el mes anterior (+%.1f%%)", diferencia, porcentaje)
-                diferencia < 0 -> String.format("Gastaste S/. %.2f menos que el mes anterior (%.1f%%)", -diferencia, porcentaje)
+                diferencia > 0 -> "Gastaste S/. %.2f más que el mes anterior (+%.1f%%)".format(
+                    diferencia,
+                    porcentaje
+                )
+                diferencia < 0 -> "Gastaste S/. %.2f menos que el mes anterior (%.1f%%)".format(
+                    -diferencia,
+                    porcentaje
+                )
                 else -> "Gastaste lo mismo que el mes anterior"
             }
         }
@@ -167,14 +174,11 @@ class ReporteMensualActivity : BaseActivityWithNav() {
 
         binding.pieChartCategorias.visibility = View.VISIBLE
 
-
-        val gastosPorCategoria = gastosDelMes.groupBy { it.categoria }
+        val gastosPorCategoria = gastosDelMes.groupBy { it.categoriaId }
             .mapValues { entry -> entry.value.sumOf { it.monto }.toFloat() }
-
 
         val entries = gastosPorCategoria.map { PieEntry(it.value, it.key) }
 
-        // Colores para las categorías
         val colores = listOf(
             Color.parseColor("#FF6B6B"), // Rojo
             Color.parseColor("#4ECDC4"), // Turquesa
@@ -223,6 +227,7 @@ class ReporteMensualActivity : BaseActivityWithNav() {
             return
         }
 
+        val formato = SimpleDateFormat("dd MMM yyyy", Locale("es", "ES"))
         val top3 = gastosDelMes.sortedByDescending { it.monto }.take(3)
 
         top3.forEachIndexed { index, gasto ->
@@ -236,18 +241,9 @@ class ReporteMensualActivity : BaseActivityWithNav() {
             val tvSubtitulo = itemView.findViewById<TextView>(android.R.id.text2)
 
             tvTitulo.text = "${index + 1}. ${gasto.descripcion}"
-            tvTitulo.textSize = 16f
-            tvTitulo.setTextColor(Color.BLACK)
+            tvSubtitulo.text =
+                "${gasto.categoriaId} - S/. %.2f - ${formato.format(Date(gasto.fecha))}".format(gasto.monto)
 
-            tvSubtitulo.text = String.format(
-                "%s - S/. %.2f - %s",
-                gasto.categoria,
-                gasto.monto,
-                gasto.fecha
-            )
-            tvSubtitulo.textSize = 14f
-
-            itemView.setPadding(0, 16, 0, 16)
             binding.llTop3.addView(itemView)
         }
     }

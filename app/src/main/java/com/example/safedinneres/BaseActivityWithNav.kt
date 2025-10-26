@@ -34,6 +34,14 @@ abstract class BaseActivityWithNav : AppCompatActivity() {
                     true
                 }
 
+                R.id.nav_cuentas -> {
+                    if (this !is CuentasActivity) {
+                        startActivity(Intent(this, CuentasActivity::class.java))
+                        finish()
+                    }
+                    true
+                }
+
                 R.id.nav_reportes -> {
                     if (this !is ReporteMensualActivity) {
                         startActivity(Intent(this, ReporteMensualActivity::class.java))
@@ -71,6 +79,7 @@ abstract class BaseActivityWithNav : AppCompatActivity() {
             is MainActivity -> R.id.nav_home
             is AgregarGastoActivity -> R.id.nav_agregar
             is AgregarPresupuestoActivity -> R.id.nav_presupuesto
+            is CuentasActivity -> R.id.nav_cuentas
             is PerfilActivity -> R.id.nav_perfil
             is ReporteMensualActivity -> R.id.nav_reportes
             else -> R.id.nav_home

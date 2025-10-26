@@ -17,6 +17,11 @@
         android:title="Agregar" />
 
     <item
+        android:id="@+id/nav_cuentas"
+        android:icon="@drawable/ic_cuentas"
+        android:title="Cuentas" />
+
+    <item
         android:id="@+id/nav_reportes"
         android:icon="@drawable/ic_chart"
         android:title="Reportes" />
