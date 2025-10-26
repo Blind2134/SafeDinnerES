@@ -1,5 +1,6 @@
 package com.example.safedinneres.repository
 
+import android.util.Log
 import com.example.safedinneres.models.Cuenta
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
@@ -13,9 +14,15 @@ class CuentaRepository {
     suspend fun guardarCuenta(cuenta: Cuenta): Result<Void?> {
         return try {
             val id = cuenta.id ?: collection.document().id
+            Log.d("CuentaRepository", "Guardando cuenta con ID: $id")
+            Log.d("CuentaRepository", "Datos: $cuenta")
+
             collection.document(id).set(cuenta.copy(id = id)).await()
+
+            Log.d("CuentaRepository", "Cuenta guardada exitosamente")
             Result.success(null)
         } catch (e: Exception) {
+            Log.e("CuentaRepository", "Error al guardar cuenta", e)
             Result.failure(e)
         }
     }
@@ -23,10 +30,13 @@ class CuentaRepository {
     // 🔹 Obtener todas las cuentas de un usuario
     suspend fun obtenerCuentasPorUsuario(userId: String): Result<List<Cuenta>> {
         return try {
+            Log.d("CuentaRepository", "Obteniendo cuentas para userId: $userId")
             val snapshot = collection.whereEqualTo("userId", userId).get().await()
             val cuentas = snapshot.toObjects(Cuenta::class.java)
+            Log.d("CuentaRepository", "Cuentas obtenidas: ${cuentas.size}")
             Result.success(cuentas)
         } catch (e: Exception) {
+            Log.e("CuentaRepository", "Error al obtener cuentas", e)
             Result.failure(e)
         }
     }
@@ -45,14 +55,16 @@ class CuentaRepository {
     // 🔹 Eliminar una cuenta
     suspend fun eliminarCuenta(id: String): Result<Void?> {
         return try {
+            Log.d("CuentaRepository", "Eliminando cuenta con ID: $id")
             collection.document(id).delete().await()
             Result.success(null)
         } catch (e: Exception) {
+            Log.e("CuentaRepository", "Error al eliminar cuenta", e)
             Result.failure(e)
         }
     }
 
-    // 🔹 Actualizar saldo (por ejemplo, cuando haces un gasto)
+    // 🔹 Actualizar saldo
     suspend fun actualizarSaldoCuenta(id: String, nuevoSaldo: Double): Result<Void?> {
         return try {
             val saldoSeguro = if (nuevoSaldo < 0) 0.0 else nuevoSaldo
@@ -63,7 +75,7 @@ class CuentaRepository {
         }
     }
 
-    // 🔹 Actualizar deuda (para cuentas de crédito)
+    // 🔹 Actualizar deuda
     suspend fun actualizarDeudaCuenta(id: String, nuevaDeuda: Double): Result<Void?> {
         return try {
             collection.document(id).update("deudaActual", nuevaDeuda).await()

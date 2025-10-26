@@ -19,18 +19,38 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp"
-            android:paddingBottom="16dp">
+            android:padding="16dp">
 
-            <TextView
-                android:id="@+id/tvTituloCuentas"
+            <!-- Header con título y botón -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Mis Cuentas"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:padding="8dp"
-                android:textColor="@color/black"/>
+                android:orientation="horizontal"
+                android:gravity="center_vertical"
+                android:padding="8dp">
+
+                <TextView
+                    android:id="@+id/tvTituloCuentas"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Mis Cuentas"
+                    android:textSize="22sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"/>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnAgregarCuenta"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Agregar"
+                    android:textColor="@color/white"
+                    app:icon="@drawable/ic_add"
+                    app:iconTint="@color/white"
+                    app:cornerRadius="20dp"
+                    android:backgroundTint="?attr/colorPrimary" />
+
+            </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerCuentas"
@@ -42,18 +62,6 @@
 
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fabAgregarCuenta"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_marginEnd="24dp"
-        android:layout_marginBottom="80dp"
-        app:srcCompat="@drawable/ic_add"
-        android:contentDescription="Agregar cuenta"
-        android:tint="@color/white"
-        android:backgroundTint="?attr/colorPrimary" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
