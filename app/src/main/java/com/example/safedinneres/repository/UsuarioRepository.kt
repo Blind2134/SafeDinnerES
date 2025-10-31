@@ -43,14 +43,14 @@ class UsuarioRepository {
             val result = auth.signInWithEmailAndPassword(email, password).await()
             val uid = result.user?.uid ?: return Result.failure(Exception("Error al obtener UID"))
 
-            // ⭐ NUEVO: Verificar si el email está confirmado
+
             val user = result.user
             if (user?.isEmailVerified == false) {
                 auth.signOut()
                 return Result.failure(Exception("Por favor verifica tu correo electrónico antes de iniciar sesión"))
             }
 
-            // Obtener datos del usuario de Firestore
+
             val snapshot = db.collection("usuarios").document(uid).get().await()
             val usuario = snapshot.toObject(Usuario::class.java)
                 ?: return Result.failure(Exception("Usuario no encontrado"))

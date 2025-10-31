@@ -56,13 +56,13 @@ class RegisterActivity : AppCompatActivity() {
             return
         }
 
-        // ⭐ DESHABILITAR BOTÓN MIENTRAS PROCESA
+
         binding.btnRegister.isEnabled = false
 
         lifecycleScope.launch {
             val resultado = usuarioRepo.registrarUsuario(nombre, email, password)
 
-            // ⭐ HABILITAR BOTÓN NUEVAMENTE
+
             binding.btnRegister.isEnabled = true
 
             if (resultado.isSuccess) {
@@ -73,7 +73,7 @@ class RegisterActivity : AppCompatActivity() {
                     Toast.LENGTH_LONG
                 ).show()
 
-                // ⭐ Ir al LoginActivity en lugar de MainActivity
+
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                 startActivity(intent)

@@ -55,15 +55,15 @@ class AgregarGastoActivity : BaseActivityWithNav() {
         configurarSpinnerCategoria()
         configurarSpinnerMetodoPago()
 
-        // Selección de fecha
+
         binding.tvFechaValue.setOnClickListener { mostrarSelectorFecha() }
 
-        // Botones
+
         binding.btnGuardar.setOnClickListener { guardarGasto() }
         binding.btnEliminar.setOnClickListener { eliminarGasto() }
         binding.btnCancelar.setOnClickListener { finish() }
 
-        // Revisar si viene un gasto para editar
+
         gastoId = intent.getStringExtra("gasto_id")
         if (gastoId != null) {
             binding.btnEliminar.visibility = View.VISIBLE
@@ -153,7 +153,7 @@ class AgregarGastoActivity : BaseActivityWithNav() {
         }
 
         lifecycleScope.launch {
-            // Obtener el gasto original si estamos editando
+
             val gastoOriginal = gastoId?.let {
                 val res = gastoRepository.obtenerGastoPorId(it)
                 if (res.isSuccess) res.getOrNull() else null

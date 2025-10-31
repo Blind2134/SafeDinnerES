@@ -143,7 +143,7 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    // ⭐ NUEVA FUNCIÓN: Mostrar dialog de recuperar contraseña
+
     private fun mostrarDialogRecuperarPassword() {
         val builder = AlertDialog.Builder(this)
         val dialogView = layoutInflater.inflate(R.layout.dialog_recuperar_password, null)
@@ -175,7 +175,7 @@ class LoginActivity : AppCompatActivity() {
             .show()
     }
 
-    // ⭐ NUEVA FUNCIÓN: Enviar email de recuperación
+
     private fun enviarEmailRecuperacion(email: String) {
         val progressDialog = ProgressDialog(this)
         progressDialog.setMessage("Enviando correo...")

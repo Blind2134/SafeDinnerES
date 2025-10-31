@@ -11,7 +11,7 @@ import java.util.*
 
 class GastoAdapter(
     private var listaGastos: List<Gasto>,
-    private val onItemClick: (Gasto) -> Unit // 👈 función lambda para el clic
+    private val onItemClick: (Gasto) -> Unit
 ) : RecyclerView.Adapter<GastoAdapter.ViewHolder>() {
 
     inner class ViewHolder(val binding: ItemGastoBinding) :
@@ -54,7 +54,7 @@ class GastoAdapter(
             tvIconoCategoria.text = emojiCat
             viewColorCategoria.setBackgroundColor(colorCat.toColorInt())
 
-            // 📅 Formato de fecha legible
+
             val formato = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             tvFecha.text = formato.format(Date(gasto.fecha))
 

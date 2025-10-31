@@ -38,7 +38,7 @@ class GastoRepository {
         }
     }
 
-    // Actualizar gasto existente
+
     suspend fun actualizarGasto(gasto: Gasto): Result<Void?> {
         return try {
             if (gasto.id == null) throw Exception("ID del gasto no puede ser null")
@@ -49,7 +49,7 @@ class GastoRepository {
         }
     }
 
-    // Eliminar gasto
+
     suspend fun eliminarGasto(id: String): Result<Void?> {
         return try {
             db.collection("gastos").document(id).delete().await()
