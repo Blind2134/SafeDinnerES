@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <!-- Nombre de la cuenta -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Nombre de la cuenta"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundMode="outline"
+        app:startIconDrawable="@drawable/ic_cuentas">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etNombreCuenta"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:maxLines="1" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Tipo de cuenta -->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Tipo de cuenta"
+        android:textStyle="bold"
+        android:textSize="14sp"
+        android:layout_marginBottom="8dp"
+        android:textColor="@color/text_primary" />
+
+    <RadioGroup
+        android:id="@+id/rgTipoCuenta"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginBottom="16dp">
+
+        <RadioButton
+            android:id="@+id/rbDebito"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Débito"
+            android:checked="true" />
+
+        <RadioButton
+            android:id="@+id/rbCredito"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Crédito" />
+
+    </RadioGroup>
+
+    <!-- Saldo inicial (para débito) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilSaldoInicial"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Saldo inicial"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundMode="outline"
+        app:prefixText="S/. "
+        app:startIconDrawable="@drawable/ic_cash">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etSaldoInicial"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:text="0" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <!-- Límite de crédito (para crédito) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilLimiteCredito"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Límite de crédito"
+        android:visibility="gone"
+        app:boxBackgroundMode="outline"
+        app:prefixText="S/. "
+        app:startIconDrawable="@drawable/ic_credit_card">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etLimiteCredito"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLines="1"
+            android:text="0" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+</LinearLayout>

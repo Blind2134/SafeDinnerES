@@ -1,69 +1,137 @@
 package com.example.safedinneres.repository
 
 import com.example.safedinneres.models.Gasto
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
+import java.text.SimpleDateFormat
+import java.util.*
 
 class GastoRepository {
 
     private val db = FirebaseFirestore.getInstance()
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val collection = db.collection("gastos")
 
-
-    suspend fun agregarGasto(gasto: Gasto): Result<Void?> {
+    // 🔹 Guardar o actualizar un gasto
+    suspend fun guardarGasto(gasto: Gasto): Result<Void?> {
         return try {
-            val id = db.collection("gastos").document().id
-            val nuevo = gasto.copy(id = id, userId = user?.uid ?: "")
-            db.collection("gastos").document(id).set(nuevo).await()
+            val id = gasto.id ?: collection.document().id
+            collection.document(id).set(gasto.copy(id = id)).await()
             Result.success(null)
         } catch (e: Exception) {
             Result.failure(e)
         }
     }
 
-
-    suspend fun listarGastos(mes: String): Result<List<Gasto>> {
+    // 🔹 Obtener un gasto por su ID
+    suspend fun obtenerGastoPorId(id: String): Result<Gasto?> {
         return try {
-            val query = db.collection("gastos")
-                .whereEqualTo("userId", user?.uid)
-                .whereEqualTo("mes", mes)
+            val snapshot = collection.document(id).get().await()
+            val gasto = snapshot.toObject(Gasto::class.java)
+            Result.success(gasto)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Obtener todos los gastos del usuario
+    suspend fun obtenerGastosPorUsuario(userId: String): Result<List<Gasto>> {
+        return try {
+            val snapshot = collection
+                .whereEqualTo("userId", userId)
+                .orderBy("fecha")
+                .get()
+                .await()
+            val gastos = snapshot.toObjects(Gasto::class.java)
+            Result.success(gastos)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Obtener gastos por categoría
+    suspend fun obtenerGastosPorCategoria(userId: String, categoriaId: String): Result<List<Gasto>> {
+        return try {
+            val snapshot = collection
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("categoriaId", categoriaId)
+                .get()
+                .await()
+            val gastos = snapshot.toObjects(Gasto::class.java)
+            Result.success(gastos)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Obtener gastos por cuenta
+    suspend fun obtenerGastosPorCuenta(userId: String, cuentaId: String): Result<List<Gasto>> {
+        return try {
+            val snapshot = collection
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("cuentaId", cuentaId)
+                .get()
+                .await()
+            val gastos = snapshot.toObjects(Gasto::class.java)
+            Result.success(gastos)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Obtener gastos por método de pago
+    suspend fun obtenerGastosPorMetodoPago(userId: String, metodoPagoId: String): Result<List<Gasto>> {
+        return try {
+            val snapshot = collection
+                .whereEqualTo("userId", userId)
+                .whereEqualTo("metodoPagoId", metodoPagoId)
+                .get()
+                .await()
+            val gastos = snapshot.toObjects(Gasto::class.java)
+            Result.success(gastos)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Eliminar gasto
+    suspend fun eliminarGasto(id: String): Result<Void?> {
+        return try {
+            collection.document(id).delete().await()
+            Result.success(null)
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    // 🔹 Listar gastos por mes (para MainActivity)
+    suspend fun listarGastos(mesTexto: String): Result<List<Gasto>> {
+        return try {
+            val prefs = android.preference.PreferenceManager.getDefaultSharedPreferences(
+                com.google.firebase.FirebaseApp.getInstance().applicationContext
+            )
+            val userId = prefs.getString("uid_usuario", null) ?: return Result.success(emptyList())
+
+            val formato = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
+            val mesActual = formato.parse(mesTexto)
+
+            val calendario = Calendar.getInstance()
+            calendario.time = mesActual ?: Date()
+            calendario.set(Calendar.DAY_OF_MONTH, 1)
+            val inicioMes = calendario.timeInMillis
+
+            calendario.add(Calendar.MONTH, 1)
+            val finMes = calendario.timeInMillis
+
+            val snapshot = collection
+                .whereEqualTo("userId", userId)
+                .whereGreaterThanOrEqualTo("fecha", inicioMes)
+                .whereLessThan("fecha", finMes)
+                .orderBy("fecha")
                 .get()
                 .await()
 
-            val lista = query.documents.mapNotNull { it.toObject(Gasto::class.java) }
-            Result.success(lista)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Actualizar gasto existente
-    suspend fun actualizarGasto(gasto: Gasto): Result<Void?> {
-        return try {
-            if (gasto.id == null) throw Exception("ID del gasto no puede ser null")
-            db.collection("gastos").document(gasto.id).set(gasto).await()
-            Result.success(null)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    // Eliminar gasto
-    suspend fun eliminarGasto(id: String): Result<Void?> {
-        return try {
-            db.collection("gastos").document(id).delete().await()
-            Result.success(null)
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
-
-    suspend fun obtenerGastoPorId(id: String): Result<Gasto> {
-        return try {
-            val doc = db.collection("gastos").document(id).get().await()
-            val gasto = doc.toObject(Gasto::class.java)
-            if (gasto != null) Result.success(gasto) else Result.failure(Exception("Gasto no encontrado"))
+            val gastos = snapshot.toObjects(Gasto::class.java)
+            Result.success(gastos)
         } catch (e: Exception) {
             Result.failure(e)
         }

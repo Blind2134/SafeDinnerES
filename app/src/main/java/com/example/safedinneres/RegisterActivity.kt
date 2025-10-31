@@ -14,6 +14,7 @@ class RegisterActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityRegisterBinding
     private val usuarioRepo = UsuarioRepository()
+    private val dataInitializer = DataInitializer()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,39 +49,37 @@ class RegisterActivity : AppCompatActivity() {
         }
 
         if (password.length < 6) {
-            Toast.makeText(
-                this,
-                "La contraseña debe tener al menos 6 caracteres",
-                Toast.LENGTH_SHORT
-            ).show()
+            Toast.makeText(this, "La contraseña debe tener al menos 6 caracteres", Toast.LENGTH_SHORT).show()
             return
         }
 
-        // ⭐ DESHABILITAR BOTÓN MIENTRAS PROCESA
+        // 🔒 Deshabilitar botón mientras se registra
         binding.btnRegister.isEnabled = false
 
         lifecycleScope.launch {
             val resultado = usuarioRepo.registrarUsuario(nombre, email, password)
-
-            // ⭐ HABILITAR BOTÓN NUEVAMENTE
             binding.btnRegister.isEnabled = true
 
             if (resultado.isSuccess) {
-                // ⭐ NUEVO MENSAJE: Ya no guardamos sesión ni vamos a MainActivity
-                Toast.makeText(
-                    this@RegisterActivity,
-                    "Cuenta creada ✅\n\nPor favor verifica tu correo electrónico antes de iniciar sesión",
-                    Toast.LENGTH_LONG
-                ).show()
+                val usuario = resultado.getOrNull()
+                if (usuario != null) {
+                    // Crear categorías iniciales solo la primera vez
+                    val dataInitializer = DataInitializer()
+                    dataInitializer.crearCategoriasIniciales(usuario.id ?: "")
 
-                // ⭐ Ir al LoginActivity en lugar de MainActivity
-                val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+                    Toast.makeText(
+                        this@RegisterActivity,
+                        "Cuenta creada ✅\nPor favor verifica tu correo electrónico antes de iniciar sesión",
+                        Toast.LENGTH_LONG
+                    ).show()
 
+                    // Ir al login
+                    val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                }
             } else {
                 val error = resultado.exceptionOrNull()
-                error?.printStackTrace()
                 Toast.makeText(
                     this@RegisterActivity,
                     "Error: ${error?.message ?: "Desconocido"}",
