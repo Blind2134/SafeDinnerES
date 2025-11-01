@@ -19,7 +19,7 @@ class AgregarGastoActivity : BaseActivityWithNav() {
     private lateinit var binding: ActivityAgregarGastoBinding
     private lateinit var gastoRepository: GastoRepository
     private var fechaSeleccionadaTimestamp: Long = System.currentTimeMillis()
-    private var gastoId: String? = null  // null si es nuevo
+    private var gastoId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

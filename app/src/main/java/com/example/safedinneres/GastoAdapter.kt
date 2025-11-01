@@ -58,7 +58,7 @@ class GastoAdapter(
             val formato = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
             tvFecha.text = formato.format(Date(gasto.fecha))
 
-            // 👇 Clic en el item
+
             root.setOnClickListener {
                 onItemClick(gasto)
             }

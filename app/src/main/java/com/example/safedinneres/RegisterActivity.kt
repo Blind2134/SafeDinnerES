@@ -66,7 +66,7 @@ class RegisterActivity : AppCompatActivity() {
             binding.btnRegister.isEnabled = true
 
             if (resultado.isSuccess) {
-                // ⭐ NUEVO MENSAJE: Ya no guardamos sesión ni vamos a MainActivity
+
                 Toast.makeText(
                     this@RegisterActivity,
                     "Cuenta creada ✅\n\nPor favor verifica tu correo electrónico antes de iniciar sesión",
