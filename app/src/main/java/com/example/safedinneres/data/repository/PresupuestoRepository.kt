@@ -1,6 +1,6 @@
-package com.example.safedinneres.repository
+package com.example.safedinneres.data.repository
 
-import com.example.safedinneres.models.Presupuesto
+import com.example.safedinneres.data.models.Presupuesto
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.tasks.await
 

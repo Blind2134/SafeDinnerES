@@ -1,18 +1,24 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.presupuesto
 
 import android.app.DatePickerDialog
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.CalendarView
 import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
+import com.example.safedinneres.base.BaseActivityWithNav
+import com.example.safedinneres.R
 import com.example.safedinneres.databinding.ActivityAgregarPresupuestoBinding
-import com.example.safedinneres.models.Presupuesto
-import com.example.safedinneres.repository.PresupuestoRepository
+import com.example.safedinneres.data.models.Presupuesto
+import com.example.safedinneres.data.repository.PresupuestoRepository
+import com.example.safedinneres.ui.main.MainActivity
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class AgregarPresupuestoActivity : BaseActivityWithNav() {
 
@@ -109,10 +115,10 @@ class AgregarPresupuestoActivity : BaseActivityWithNav() {
 
         try {
             val daySpinner = datePickerDialog.datePicker
-                .findViewById<android.widget.CalendarView>(
+                .findViewById<CalendarView>(
                     resources.getIdentifier("day", "id", "android")
                 )
-            daySpinner?.visibility = android.view.View.GONE
+            daySpinner?.visibility = View.GONE
         } catch (_: Exception) {}
 
         datePickerDialog.show()
@@ -125,12 +131,12 @@ class AgregarPresupuestoActivity : BaseActivityWithNav() {
                 presupuestoExistente = resultado.getOrNull()
                 presupuestoExistente?.let {
                     binding.etAmount.setText(it.montoTotal.toString())
-                    binding.btnDelete.visibility = android.view.View.VISIBLE
-                    binding.spaceDelete.visibility = android.view.View.VISIBLE
+                    binding.btnDelete.visibility = View.VISIBLE
+                    binding.spaceDelete.visibility = View.VISIBLE
                 } ?: run {
                     binding.etAmount.setText("")
-                    binding.btnDelete.visibility = android.view.View.GONE
-                    binding.spaceDelete.visibility = android.view.View.GONE
+                    binding.btnDelete.visibility = View.GONE
+                    binding.spaceDelete.visibility = View.GONE
                 }
             } else {
                 Toast.makeText(

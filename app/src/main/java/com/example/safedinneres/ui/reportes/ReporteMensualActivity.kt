@@ -1,4 +1,4 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.reportes
 
 import android.graphics.Color
 import android.os.Bundle
@@ -6,18 +6,21 @@ import android.view.View
 import android.widget.TextView
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.example.safedinneres.base.BaseActivityWithNav
+import com.example.safedinneres.R
 import com.example.safedinneres.databinding.ActivityReporteMensualBinding
-import com.example.safedinneres.models.Gasto
-import com.example.safedinneres.models.Presupuesto
-import com.example.safedinneres.repository.GastoRepository
-import com.example.safedinneres.repository.PresupuestoRepository
+import com.example.safedinneres.data.models.Gasto
+import com.example.safedinneres.data.models.Presupuesto
+import com.example.safedinneres.data.repository.GastoRepository
+import com.example.safedinneres.data.repository.PresupuestoRepository
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
 import com.github.mikephil.charting.formatter.PercentFormatter
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class ReporteMensualActivity : BaseActivityWithNav() {
 
@@ -85,7 +88,7 @@ class ReporteMensualActivity : BaseActivityWithNav() {
 
         lifecycleScope.launch {
             try {
-                git
+
                 val resGastos = gastoRepository.listarGastos(mesTexto)
                 if (resGastos.isSuccess) {
                     gastosDelMes = resGastos.getOrNull() ?: emptyList()

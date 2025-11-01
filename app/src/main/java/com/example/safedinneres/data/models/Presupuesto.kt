@@ -1,4 +1,4 @@
-package com.example.safedinneres.models
+package com.example.safedinneres.data.models
 
 
 data class Presupuesto(

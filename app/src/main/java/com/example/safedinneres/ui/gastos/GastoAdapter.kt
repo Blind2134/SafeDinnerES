@@ -1,11 +1,11 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.gastos
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.graphics.toColorInt
 import androidx.recyclerview.widget.RecyclerView
 import com.example.safedinneres.databinding.ItemGastoBinding
-import com.example.safedinneres.models.Gasto
+import com.example.safedinneres.data.models.Gasto
 import java.text.SimpleDateFormat
 import java.util.*
 

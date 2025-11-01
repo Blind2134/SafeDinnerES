@@ -1,8 +1,14 @@
-package com.example.safedinneres
+package com.example.safedinneres.base
 
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.safedinneres.R
+import com.example.safedinneres.ui.gastos.AgregarGastoActivity
+import com.example.safedinneres.ui.main.MainActivity
+import com.example.safedinneres.ui.perfil.PerfilActivity
+import com.example.safedinneres.ui.presupuesto.AgregarPresupuestoActivity
+import com.example.safedinneres.ui.reportes.ReporteMensualActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 abstract class BaseActivityWithNav : AppCompatActivity() {

@@ -1,16 +1,19 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.auth
 
 import android.app.AlertDialog
 import android.app.ProgressDialog
 import android.content.Intent
 import android.os.Bundle
+import android.util.Patterns
 import android.widget.EditText
 import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.example.safedinneres.R
 import com.example.safedinneres.databinding.ActivityLoginBinding
-import com.example.safedinneres.repository.UsuarioRepository
+import com.example.safedinneres.data.repository.UsuarioRepository
+import com.example.safedinneres.ui.main.MainActivity
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 
@@ -160,7 +163,7 @@ class LoginActivity : AppCompatActivity() {
                     return@setPositiveButton
                 }
 
-                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+                if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
                     Toast.makeText(this, "Ingresa un correo válido", Toast.LENGTH_SHORT).show()
                     return@setPositiveButton
                 }

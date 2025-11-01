@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#EDEDED"
     android:id="@+id/main"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
 
 
     <LinearLayout

@@ -1,4 +1,4 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.auth
 
 import android.content.Intent
 import android.os.Bundle
@@ -7,7 +7,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.example.safedinneres.databinding.ActivityRegisterBinding
-import com.example.safedinneres.repository.UsuarioRepository
+import com.example.safedinneres.data.repository.UsuarioRepository
 import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {

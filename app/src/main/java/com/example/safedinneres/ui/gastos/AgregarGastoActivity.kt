@@ -1,14 +1,16 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.gastos
 
+import android.R
 import android.app.DatePickerDialog
 import android.os.Bundle
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
+import com.example.safedinneres.base.BaseActivityWithNav
 import com.example.safedinneres.databinding.ActivityAgregarGastoBinding
-import com.example.safedinneres.models.Gasto
-import com.example.safedinneres.repository.GastoRepository
+import com.example.safedinneres.data.models.Gasto
+import com.example.safedinneres.data.repository.GastoRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
@@ -75,15 +77,15 @@ class AgregarGastoActivity : BaseActivityWithNav() {
 
     private fun configurarSpinnerCategoria() {
         val categorias = listOf("Comida", "Transporte", "Educación", "Entretenimiento", "Otros")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, categorias)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, categorias)
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinnerCategoria.adapter = adapter
     }
 
     private fun configurarSpinnerMetodoPago() {
         val metodos = listOf("Efectivo", "Tarjeta", "Yape", "Plin", "Transferencia")
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, metodos)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        val adapter = ArrayAdapter(this, R.layout.simple_spinner_item, metodos)
+        adapter.setDropDownViewResource(R.layout.simple_spinner_dropdown_item)
         binding.spinnerMetodoPago.adapter = adapter
     }
 

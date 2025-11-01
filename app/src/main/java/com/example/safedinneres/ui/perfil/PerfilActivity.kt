@@ -1,10 +1,12 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.perfil
 
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import com.example.safedinneres.base.BaseActivityWithNav
+import com.example.safedinneres.ui.auth.LoginActivity
 import com.example.safedinneres.databinding.ActivityPerfilBinding
-import com.example.safedinneres.repository.UsuarioRepository
+import com.example.safedinneres.data.repository.UsuarioRepository
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers

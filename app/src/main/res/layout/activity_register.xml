@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:fillViewport="true"
     android:id="@+id/main"
-    tools:context=".RegisterActivity">
+    tools:context=".ui.auth.RegisterActivity">
 
     <LinearLayout
         android:layout_width="match_parent"

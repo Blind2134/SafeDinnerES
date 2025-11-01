@@ -1,4 +1,4 @@
-package com.example.safedinneres
+package com.example.safedinneres.ui.main
 
 import android.content.Intent
 import android.os.Bundle
@@ -6,14 +6,20 @@ import android.view.View
 import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.safedinneres.ui.gastos.AgregarGastoActivity
+import com.example.safedinneres.base.BaseActivityWithNav
+import com.example.safedinneres.ui.gastos.GastoAdapter
+import com.example.safedinneres.ui.auth.LoginActivity
+import com.example.safedinneres.R
 import com.example.safedinneres.databinding.ActivityMainBinding
-import com.example.safedinneres.models.Gasto
-import com.example.safedinneres.models.Presupuesto
-import com.example.safedinneres.repository.GastoRepository
-import com.example.safedinneres.repository.PresupuestoRepository
+import com.example.safedinneres.data.models.Gasto
+import com.example.safedinneres.data.models.Presupuesto
+import com.example.safedinneres.data.repository.GastoRepository
+import com.example.safedinneres.data.repository.PresupuestoRepository
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Calendar
+import java.util.Locale
 
 class MainActivity : BaseActivityWithNav() {
 
