@@ -34,7 +34,7 @@ class LoginActivity : AppCompatActivity() {
             finish()
         }
 
-        // ⭐ NUEVO: Click en "¿Olvidaste tu contraseña?"
+
         binding.tvOlvidastePassword.setOnClickListener {
             mostrarDialogRecuperarPassword()
         }

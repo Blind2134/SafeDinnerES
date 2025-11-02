@@ -61,19 +61,7 @@ class UsuarioRepository {
         }
     }
 
-    suspend fun reenviarEmailVerificacion(): Result<Unit> {
-        return try {
-            val user = auth.currentUser
-            if (user != null) {
-                user.sendEmailVerification().await()
-                Result.success(Unit)
-            } else {
-                Result.failure(Exception("No hay usuario autenticado"))
-            }
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+
 
     suspend fun obtenerUsuarioPorId(uid: String): Result<Usuario> {
         return try {
