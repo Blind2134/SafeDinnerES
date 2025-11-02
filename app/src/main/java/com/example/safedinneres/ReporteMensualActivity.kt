@@ -85,7 +85,7 @@ class ReporteMensualActivity : BaseActivityWithNav() {
 
         lifecycleScope.launch {
             try {
-                git
+
                 val resGastos = gastoRepository.listarGastos(mesTexto)
                 if (resGastos.isSuccess) {
                     gastosDelMes = resGastos.getOrNull() ?: emptyList()

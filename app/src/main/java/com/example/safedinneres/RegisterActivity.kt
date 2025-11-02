@@ -69,9 +69,11 @@ class RegisterActivity : AppCompatActivity() {
 
                 Toast.makeText(
                     this@RegisterActivity,
-                    "Cuenta creada ✅\n\nPor favor verifica tu correo electrónico antes de iniciar sesión",
+                    R.string.verifica_tu_correo,
                     Toast.LENGTH_LONG
                 ).show()
+
+                kotlinx.coroutines.delay(2500)
 
 
                 val intent = Intent(this@RegisterActivity, LoginActivity::class.java)
